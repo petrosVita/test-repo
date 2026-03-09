@@ -36,6 +36,19 @@ def list_tasks():
         print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}")
 
 
+def search_tasks(keyword):
+    tasks = load_tasks()
+    matches = [t for t in tasks if keyword.lower() in t["title"].lower()]
+    if not matches:
+        print(f"No tasks matching '{keyword}'.")
+        return
+    for t in matches:
+        status = "x" if t["done"] else " "
+        priority = t.get("priority", "medium")
+        due = f" due:{t['due_date']}" if t.get("due_date") else ""
+        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}")
+
+
 def mark_done(task_id):
     tasks = load_tasks()
     for t in tasks:
@@ -81,6 +94,8 @@ def main():
         mark_done(int(args[1]))
     elif cmd == "remove" and len(args) > 1:
         remove_task(int(args[1]))
+    elif cmd == "search" and len(args) > 1:
+        search_tasks(" ".join(args[1:]))
     else:
         print(f"Unknown command: {cmd}")
 
