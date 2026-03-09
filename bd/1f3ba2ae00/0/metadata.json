@@ -1,0 +1,32 @@
+{
+  "checkpoint_id": "bd1f3ba2ae00",
+  "session_id": "9bc5a772-96ec-4982-a886-f3d8d2e50f72",
+  "checkpoints_count": 1,
+  "strategy": "manual-commit",
+  "agent": "claude-code",
+  "created_at": "2026-03-09T11:45:27.523721779Z",
+  "cli_version": "0.0.8",
+  "turn_id": "5bfa1ba02137",
+  "files_touched": [
+    "tasks.py"
+  ],
+  "transcript_identifier_at_start": "956c29f5-e513-402c-841d-9e3f5701413c",
+  "branch": "main",
+  "token_usage": {
+    "input_tokens": 7,
+    "cache_creation_tokens": 9107,
+    "cache_read_tokens": 64320,
+    "output_tokens": 903,
+    "api_call_count": 5
+  },
+  "initial_attribution": {
+    "agent_lines": 13,
+    "agent_percentage": 100.0,
+    "calculated_at": "2026-03-09T11:45:27.503461542Z",
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 13
+  },
+  "transcript_path": "/home/petran/.claude/projects/-home-petran-Desktop-test-repo/9bc5a772-96ec-4982-a886-f3d8d2e50f72.jsonl"
+}
