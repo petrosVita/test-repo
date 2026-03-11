@@ -15,7 +15,7 @@ def save_tasks(tasks):
     DATA_FILE.write_text(json.dumps(tasks, indent=2))
 
 
-def add_task(title, priority="medium", due_date=None, tags=None):
+def add_task(title, priority="medium", due_date=None, tags=None, notes=None):
     if tags is None:
         tags = []
     tasks = load_tasks()
@@ -26,6 +26,7 @@ def add_task(title, priority="medium", due_date=None, tags=None):
         "priority": priority,
         "due_date": due_date,
         "tags": tags,
+        "notes": notes,
     }
     tasks.append(task)
     save_tasks(tasks)
@@ -44,7 +45,8 @@ def list_tasks():
         priority = t.get("priority", "medium")
         due = f" due:{t['due_date']}" if t.get("due_date") else ""
         tags = f" tags:{','.join(t.get('tags', []))}" if t.get("tags") else ""
-        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}{tags}")
+        notes = f" notes:{t['notes']}" if t.get("notes") else ""
+        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}{tags}{notes}")
 
 
 def search_tasks(keyword):
@@ -58,7 +60,8 @@ def search_tasks(keyword):
         priority = t.get("priority", "medium")
         due = f" due:{t['due_date']}" if t.get("due_date") else ""
         tags = f" tags:{','.join(t.get('tags', []))}" if t.get("tags") else ""
-        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}{tags}")
+        notes = f" notes:{t['notes']}" if t.get("notes") else ""
+        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}{tags}{notes}")
 
 
 def mark_done(task_id):
@@ -95,6 +98,7 @@ def main():
         priority = "medium"
         due_date = None
         tags = []
+        notes = None
         remaining = args[1:]
         i = 0
         while i < len(remaining):
@@ -107,9 +111,12 @@ def main():
             elif remaining[i] == "--tag" and i + 1 < len(remaining):
                 tags.append(remaining[i + 1])
                 remaining = remaining[:i] + remaining[i + 2:]
+            elif remaining[i] == "--notes" and i + 1 < len(remaining):
+                notes = remaining[i + 1]
+                remaining = remaining[:i] + remaining[i + 2:]
             else:
                 i += 1
-        add_task(" ".join(remaining), priority, due_date, tags)
+        add_task(" ".join(remaining), priority, due_date, tags, notes)
     elif cmd == "list":
         list_tasks()
     elif cmd == "done" and len(args) > 1:
