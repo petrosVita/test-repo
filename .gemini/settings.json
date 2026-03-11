@@ -1,0 +1,9 @@
+{
+  "hooks": {
+    "SessionStart": [{ "hooks": [{ "type": "command", "command": "bitloops hooks gemini session-start" }] }],
+    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "bitloops hooks gemini session-end" }] }],
+    "BeforeAgent": [{ "hooks": [{ "type": "command", "command": "bitloops hooks gemini before-agent" }] }],
+    "AfterAgent": [{ "hooks": [{ "type": "command", "command": "bitloops hooks gemini after-agent" }] }],
+    "PreCompress": [{ "hooks": [{ "type": "command", "command": "bitloops hooks gemini pre-compress" }] }]
+  }
+}

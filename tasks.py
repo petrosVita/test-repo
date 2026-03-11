@@ -79,10 +79,15 @@ def remove_task(task_id):
     print(f"Removed task {task_id}.")
 
 
+def clear_tasks():
+    save_tasks([])
+    print("All tasks cleared.")
+
+
 def main():
     args = sys.argv[1:]
     if not args:
-        print("Usage: tasks.py <add|list|done|remove> [args]")
+        print("Usage: tasks.py <add|list|done|remove|clear|search> [args]")
         return
 
     cmd = args[0]
@@ -111,6 +116,8 @@ def main():
         mark_done(int(args[1]))
     elif cmd == "remove" and len(args) > 1:
         remove_task(int(args[1]))
+    elif cmd == "clear":
+        clear_tasks()
     elif cmd == "search" and len(args) > 1:
         search_tasks(" ".join(args[1:]))
     else:
