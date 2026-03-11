@@ -15,13 +15,23 @@ def save_tasks(tasks):
     DATA_FILE.write_text(json.dumps(tasks, indent=2))
 
 
-def add_task(title, priority="medium", due_date=None):
+def add_task(title, priority="medium", due_date=None, tags=None):
+    if tags is None:
+        tags = []
     tasks = load_tasks()
-    task = {"id": len(tasks) + 1, "title": title, "done": False, "priority": priority, "due_date": due_date}
+    task = {
+        "id": len(tasks) + 1,
+        "title": title,
+        "done": False,
+        "priority": priority,
+        "due_date": due_date,
+        "tags": tags,
+    }
     tasks.append(task)
     save_tasks(tasks)
     due = f", due: {due_date}" if due_date else ""
-    print(f"Added: [{task['id']}] {title} (priority: {priority}{due})")
+    tag_str = f", tags: {', '.join(tags)}" if tags else ""
+    print(f"Added: [{task['id']}] {title} (priority: {priority}{due}{tag_str})")
 
 
 def list_tasks():
@@ -33,7 +43,8 @@ def list_tasks():
         status = "x" if t["done"] else " "
         priority = t.get("priority", "medium")
         due = f" due:{t['due_date']}" if t.get("due_date") else ""
-        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}")
+        tags = f" tags:{','.join(t.get('tags', []))}" if t.get("tags") else ""
+        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}{tags}")
 
 
 def search_tasks(keyword):
@@ -46,7 +57,8 @@ def search_tasks(keyword):
         status = "x" if t["done"] else " "
         priority = t.get("priority", "medium")
         due = f" due:{t['due_date']}" if t.get("due_date") else ""
-        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}")
+        tags = f" tags:{','.join(t.get('tags', []))}" if t.get("tags") else ""
+        print(f"[{status}] {t['id']}. {t['title']} [{priority}]{due}{tags}")
 
 
 def mark_done(task_id):
@@ -77,17 +89,22 @@ def main():
     if cmd == "add" and len(args) > 1:
         priority = "medium"
         due_date = None
+        tags = []
         remaining = args[1:]
-        for flag in ("--priority", "--due"):
-            if flag in remaining:
-                idx = remaining.index(flag)
-                val = remaining[idx + 1]
-                remaining = remaining[:idx] + remaining[idx + 2:]
-                if flag == "--priority":
-                    priority = val
-                else:
-                    due_date = val
-        add_task(" ".join(remaining), priority, due_date)
+        i = 0
+        while i < len(remaining):
+            if remaining[i] == "--priority" and i + 1 < len(remaining):
+                priority = remaining[i + 1]
+                remaining = remaining[:i] + remaining[i + 2:]
+            elif remaining[i] == "--due" and i + 1 < len(remaining):
+                due_date = remaining[i + 1]
+                remaining = remaining[:i] + remaining[i + 2:]
+            elif remaining[i] == "--tag" and i + 1 < len(remaining):
+                tags.append(remaining[i + 1])
+                remaining = remaining[:i] + remaining[i + 2:]
+            else:
+                i += 1
+        add_task(" ".join(remaining), priority, due_date, tags)
     elif cmd == "list":
         list_tasks()
     elif cmd == "done" and len(args) > 1:
